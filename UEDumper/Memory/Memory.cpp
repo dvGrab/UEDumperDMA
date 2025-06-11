@@ -50,29 +50,7 @@ Memory::LoadError Memory::load(std::string processName)
 
 Memory::LoadError Memory::load(int processPID)
 {
-	//should not happen!
-	if (status == bad) DebugBreak();
 
-	//only call the load function if the status is initialized
-	if (status == inizilaized)
-	{
-		baseAddress = _getBaseAddress(nullptr, processPID);
-
-		if (!baseAddress) {
-			windows::LogWindow::Log(windows::LogWindow::logLevels::LOGLEVEL_ERROR, "MEMORY", "Error getting base address!");
-			return noBaseAddress;
-		}
-
-		processID = processPID;
-		if (!processID) {
-			windows::LogWindow::Log(windows::LogWindow::logLevels::LOGLEVEL_ERROR, "MEMORY", "Error getting process ID!");
-			return noProcessID;
-		}
-
-		attachToProcess(processID);
-
-		windows::LogWindow::Log(windows::LogWindow::logLevels::LOGLEVEL_INFO, "MEMORY", "Loaded Memory class!");
-	}
 
 	status = loaded;
 	return success;

@@ -5,6 +5,13 @@
 #include <Windows.h>
 #include <tlhelp32.h>
 
+#include "vmmdll.h"
+#include "leechcore.h"
+
+#pragma comment(lib, "leechcore.lib")
+#pragma comment(lib, "vmm.lib")
+
+#include "Frontend/Windows/LogWindow.h"
 /*
 ██████╗░██╗░░░░░███████╗░█████╗░░██████╗███████╗  ██████╗░███████╗░█████╗░██████╗░██╗
 ██╔══██╗██║░░░░░██╔════╝██╔══██╗██╔════╝██╔════╝  ██╔══██╗██╔════╝██╔══██╗██╔══██╗██║
@@ -22,19 +29,26 @@
 /// ANY CHANGES you do to the params in functions, make sure you also edit the memory.cpp and memory.h file!
 
 //global variables here
-HANDLE procHandle = nullptr;
+VMM_HANDLE vmm_handle;
+DWORD vmm_process;
 
 //in case you need to initialize anything BEFORE your com works, you can do this in here.
 //this function IS NOT DESIGNED to already take the process name as input or anything related to the target process
 //use the function "load" below which will contain data about the process name
 inline void init()
 {
-    //...
+	AllocConsole();
+
+	const char* args[] = { "-device", "fpga" };
+
+	vmm_handle = VMMDLL_Initialize(2, args);
+
+	if (!vmm_handle)
+		windows::LogWindow::Log(windows::LogWindow::logLevels::LOGLEVEL_ERROR, "DMA", "Failed to connect to the FPGA (dma) device.");
+
 }
 
-uint64_t _getBaseAddress(const wchar_t* processName, int& pid);
-
-void attachToProcess(const int& pid);
+uint64_t _getBaseAddress(std::string processName, int& pid);
 
 /**
  * \brief use this function to initialize the target process
@@ -44,11 +58,7 @@ void attachToProcess(const int& pid);
  */
 inline void loadData(std::string& processName, uint64_t& baseAddress, int& processID)
 {
-    const auto name = std::wstring(processName.begin(), processName.end());
-
-    baseAddress = _getBaseAddress(name.c_str(), processID);
-
-    attachToProcess(processID);
+	baseAddress = _getBaseAddress(processName, processID);
 }
 
 /**
@@ -59,19 +69,18 @@ inline void loadData(std::string& processName, uint64_t& baseAddress, int& proce
  */
 inline void _read(const void* address, void* buffer, const DWORD64 size)
 {
-    size_t bytes_read = 0;
-    BOOL b = ReadProcessMemory(procHandle, address, buffer, size, &bytes_read);
-    //if failed, try with lower byte amount
-    if (!b)
-    {
-        //always read 10 bytes lower
-        for (int i = 1; i < size && !b; i += 10)
-        {
-            b = ReadProcessMemory(procHandle, address, buffer, size - i, nullptr);
-        }
-    }
-}
+	BOOL b = VMMDLL_MemReadEx(vmm_handle, vmm_process, (uintptr_t)address, (PBYTE)buffer, size, NULL, VMMDLL_FLAG_NOCACHE);
 
+	//if failed, try with lower byte amount
+	if (!b)
+	{
+		//always read 10 bytes lower
+		for (int i = 1; i < size && !b; i += 10)
+		{
+			b = VMMDLL_MemReadEx(vmm_handle, vmm_process, (uintptr_t)address, (PBYTE)buffer, size, NULL, VMMDLL_FLAG_NOCACHE);
+		}
+	}
+}
 
 /**
  * \brief write function (replace with your write logic)
@@ -81,9 +90,8 @@ inline void _read(const void* address, void* buffer, const DWORD64 size)
  */
 inline void _write(void* address, const void* buffer, const DWORD64 size)
 {
-    WriteProcessMemory(procHandle, address, buffer, size, nullptr);
+	VMMDLL_MemWrite(vmm_handle, vmm_process, (uintptr_t)address, (PBYTE)buffer, size);
 }
-
 
 /**
  * \brief gets the process base address. If you adjust the params, make sure to change them in memory.cpp too
@@ -91,56 +99,14 @@ inline void _write(void* address, const void* buffer, const DWORD64 size)
  * \param pid returns the process id
  * \return process base address
  */
-uint64_t _getBaseAddress(const wchar_t* processName, int& pid)
+uint64_t _getBaseAddress(std::string processName, int& pid)
 {
-    uint64_t baseAddress = 0;
+	uint64_t baseAddress = 0;
 
-    if (!pid)
-    {
-        // Get a handle to the process
-        const HANDLE hProcess = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-        if (hProcess == INVALID_HANDLE_VALUE) {
-            return false;
-        }
+	pid = VMMDLL_PidGetFromName(vmm_handle, processName.c_str(), &vmm_process);
 
-        // Iterate through the list of processes to find the one with the given filename
-        PROCESSENTRY32 pe32 = { sizeof(PROCESSENTRY32) };
-        if (!Process32First(hProcess, &pe32)) {
-            CloseHandle(hProcess);
-            return false;
-        }
-        while (Process32Next(hProcess, &pe32)) {
-            if (wcscmp(pe32.szExeFile, processName) == 0) {
-                pid = pe32.th32ProcessID;
-                break;
-            }
-        }
-
-        CloseHandle(hProcess);
-    }
-
-    // Get the base address of the process in memory
-    if (pid != 0) {
-        const HANDLE hModule = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);
-        if (hModule != INVALID_HANDLE_VALUE) {
-            MODULEENTRY32 me32 = { sizeof(MODULEENTRY32) };
-            if (Module32First(hModule, &me32)) {
-                baseAddress = reinterpret_cast<DWORD64>(me32.modBaseAddr);
-            }
-            CloseHandle(hModule);
-        }
-    }
-
-    // Clean up and return
-
-    return baseAddress;
-}
-
-/**
- * \brief this function might not be needed for your driver, this just attaches to the process
- * \param pid process id of the target process
- */
-void attachToProcess(const int& pid)
-{
-    procHandle = OpenProcess(PROCESS_ALL_ACCESS, 0, pid);
+	PVMMDLL_MAP_MODULEENTRY entry;
+	if (VMMDLL_Map_GetModuleFromNameU(vmm_handle, vmm_process, processName.c_str(), &entry, 0)) {
+		return (uint64_t)entry->vaBase;
+	}
 }

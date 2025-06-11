@@ -66,16 +66,12 @@
 /* UE version settings */
 
 //set your games ue version
-#define UE_VERSION UE_4_27
+#define UE_VERSION UE_5_02
 
 
 /* SDK and MDK generation */
 //if this is set to true, the SDK will contain static asserts to check whether the struct sizes and members actually match their offsets
-#define WRITE_STATIC_ASSERT_TESTS TRUE
-
-
-/* FName settings */
-
+#define WRITE_STATIC_ASSERT_TESTS FALSE
 
 //in case the FNames are encrypted, it will use your decryption function in FName_decryption.h
 #define USE_FNAME_ENCRYPTION FALSE
@@ -83,7 +79,7 @@
 //set this to TRUE if your game uses WITH_CASE_PRESERVING_NAME (WITH_EDITORONLY_DATA)
 //if GNames fail, try setting this to true
 //default FALSE
-#define WITH_CASE_PRESERVING_NAME FALSE
+#define WITH_CASE_PRESERVING_NAME TRUE
 
 //set this to false if your generation always stops and says you have a invalid fname offset
 //however all this does is check if the first item is /Scrupt/Core.UObject which should always be the case
@@ -112,7 +108,6 @@
 #define USE_LOWERCASE_STRUCT FALSE
 
 #endif
-
 
 #if UE_VERSION >= UE_4_25
 
