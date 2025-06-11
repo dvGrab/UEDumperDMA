@@ -1,10 +1,9 @@
 <h1 align="left">UEDumperDMA - Unreal Engine Dumper<br /><img src="UEDumper.png?raw=true" alt="Logo" height="250px" align="right" /></h1>
 
 <p align="left">
-  <img src="https://img.shields.io/github/license/Spuckwaffel/UEDumper" alt="License">
-  <img src="https://img.shields.io/github/stars/Spuckwaffel/UEDumper" alt="Stars">
-  <img src="https://img.shields.io/github/forks/Spuckwaffel/UEDumper" alt="Forks">
-  <img src="https://komarev.com/ghpvc/?username=UEDumper&label=Views" alt="Views">
+  <img src="https://img.shields.io/github/license/dvGrab/UEDumperDMA" alt="License">
+  <img src="https://img.shields.io/github/stars/dvGrab/UEDumperDMA" alt="Stars">
+  <img src="https://img.shields.io/github/forks/dvGrab/UEDumperDMA" alt="Forks">
 </p>
 <p>UEDumper is a all in one Unreal Engine Dumper that supports Unreal Engine 4.19 - Unreal Engine 5.3.0 and a live editor, where you can view the generated SDK at runtime and modify the games' memory. It can be used on any DMA device supporting PCILeech.</p>
 <p><a href="#features">Features</a> &bull; 
