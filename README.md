@@ -15,7 +15,7 @@ After compiling the project, make sure to add FTD3XX.dll, leechcore.dll and vmm.
 </ul>
 
 <h2>Special Thanks</h2>
-Special thanks to the original creator https://github.com/Spuckwaffel/UEDumper of the dumper. 
+Special thanks to the original creator (https://github.com/Spuckwaffel/UEDumper) of the dumper. 
 
 <h2>Features</h2>
 <ul>
