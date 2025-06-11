@@ -12,6 +12,7 @@
 #pragma comment(lib, "vmm.lib")
 
 #include "Frontend/Windows/LogWindow.h"
+
 /*
 ██████╗░██╗░░░░░███████╗░█████╗░░██████╗███████╗  ██████╗░███████╗░█████╗░██████╗░██╗
 ██╔══██╗██║░░░░░██╔════╝██╔══██╗██╔════╝██╔════╝  ██╔══██╗██╔════╝██╔══██╗██╔══██╗██║
@@ -45,7 +46,8 @@ inline void init()
 
 	if (!vmm_handle)
 		windows::LogWindow::Log(windows::LogWindow::logLevels::LOGLEVEL_ERROR, "DMA", "Failed to connect to the FPGA (dma) device.");
-
+	else
+		windows::LogWindow::Log(windows::LogWindow::logLevels::LOGLEVEL_INFO, "DMA", "Successfully connected to the DMA device.");
 }
 
 uint64_t _getBaseAddress(std::string processName, int& pid);
@@ -101,8 +103,6 @@ inline void _write(void* address, const void* buffer, const DWORD64 size)
  */
 uint64_t _getBaseAddress(std::string processName, int& pid)
 {
-	uint64_t baseAddress = 0;
-
 	pid = VMMDLL_PidGetFromName(vmm_handle, processName.c_str(), &vmm_process);
 
 	PVMMDLL_MAP_MODULEENTRY entry;
