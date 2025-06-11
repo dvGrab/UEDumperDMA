@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/github/stars/dvGrab/UEDumperDMA" alt="Stars">
   <img src="https://img.shields.io/github/forks/dvGrab/UEDumperDMA" alt="Forks">
 </p>
-<p>UEDumper is a all in one Unreal Engine Dumper that supports Unreal Engine 4.19 - Unreal Engine 5.3.0 and a live editor, where you can view the generated SDK at runtime and modify the games' memory. It can be used on any DMA device supporting PCILeech.</p>
+<p>UEDumperDMA is a all in one Unreal Engine Dumper that supports Unreal Engine 4.19 - Unreal Engine 5.3.0 and a live editor, where you can view the generated SDK at runtime and modify the games' memory. It can be used on any DMA device supporting PCILeech.</p>
 
 <h2>DMA Notice</h2>
 After compiling the project, make sure to add FTD3XX.dll, leechcore.dll and vmm.dll to the runtime directory of the dumper. 
