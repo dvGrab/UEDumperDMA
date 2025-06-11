@@ -6,21 +6,16 @@
   <img src="https://img.shields.io/github/forks/dvGrab/UEDumperDMA" alt="Forks">
 </p>
 <p>UEDumper is a all in one Unreal Engine Dumper that supports Unreal Engine 4.19 - Unreal Engine 5.3.0 and a live editor, where you can view the generated SDK at runtime and modify the games' memory. It can be used on any DMA device supporting PCILeech.</p>
-<p><a href="#features">Features</a> &bull; 
-  <a href="#getting-started">Getting Started</a> &bull; 
-  <a href="#support-for-your-game">Your Game</a> &bull; 
-  <a href="#usage">Usage</a> &bull; 
-  <a href="#contributing">Contributing</a> &bull; 
-  <a href="#license">License</a> &bull; 
-  <a href="#showcase">Showcase</a> &bull; 
-  <a href="https://discord.gg/KQrEsbJ7cH">Discord</a>
-</p>
+
 <h2>DMA Notice</h2>
 After compiling the project, make sure to add FTD3XX.dll, leechcore.dll and vmm.dll to the runtime directory of the dumper. 
 <ul>
 <li>https://github.com/ufrisk/pcileech</li>
 <li>https://github.com/ufrisk/MemProcFS</li>
 </ul>
+
+<h2>Special Thanks</h2>
+Special thanks to the original creator https://github.com/Spuckwaffel/UEDumper of the dumper. 
 
 <h2>Features</h2>
 <ul>
@@ -119,20 +114,3 @@ After compiling the project, make sure to add FTD3XX.dll, leechcore.dll and vmm.
 </ul>
 </li>
 </ol>
-<p>&nbsp;</p>
-<h2>Contributing</h2>
-<p>Contribution is always appreciated! I will most likely not add support for Unreal Engine 3 or before, but you can.</p>
-<p>Please keep in mind that i will not accept any pull requests that change the entire code base, do not use any caching, arent documented or just messy.&nbsp;</p>
-<p>This project is a very large project but very stable and uses a lot caching for almost everything in order to work properly and fast. However, if you find any better solutions, feel free to create a pull request to implement it.</p>
-<p>&nbsp;</p>
-<h2>Thank you</h2>
-<p>This project was made entirely by me and I spent a lot of free time in this project and after all i still released it to the public entirely free.&nbsp;</p>
-<p>Special thanks to Blue Fire for the idea, help and suggestions.</p>
-<p>Also special thanks to guttir14 (and all contributers to UnrealDumper-4.25) and CorrM (and all contributers to Unreal-Finder-Tool), I've used their projects as a reference while making this tool.</p>
-<p>Remember to only use this for personal use, this has been done entirely for research purposes only and should not be used in any bad way.</p>
-<p>&nbsp;</p>
-<h2>License</h2>
-<p>This project is licensed under the terms of the MIT license.</p>
-<h2>Showcase</h2>
-<p><a href="https://www.youtube.com/watch?v=DUGL_fD71Fg">Here a video on YouTube showcasing the game Only UP</a></p>
-<p>Join the discord for any questions and help <a href="https://discord.gg/KQrEsbJ7cH">here.</a></p>
