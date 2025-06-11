@@ -16,6 +16,13 @@
   <a href="#showcase">Showcase</a> &bull; 
   <a href="https://discord.gg/KQrEsbJ7cH">Discord</a>
 </p>
+<h2>DMA Notice</h2>
+After compiling the project, make sure to add FTD3XX.dll, leechcore.dll and vmm.dll to the runtime directory of the dumper. 
+<ul>
+<li>https://github.com/ufrisk/pcileech</li>
+<li>https://github.com/ufrisk/MemProcFS</li>
+</ul>
+
 <h2>Features</h2>
 <ul>
 <li>Rich GUI with the help of the ImGui library.</li>
